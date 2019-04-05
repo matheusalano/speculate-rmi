@@ -2,18 +2,18 @@
 public class Tabuleiro {
 
     private boolean[] casas;
-    private Int bolasCentro;
+    private int bolasCentro;
 
     Tabuleiro() {
         casas = new boolean[] {true, false, true, false, true};
         bolasCentro = 0;
     }
 
-    public boolean getCasa(Int posicao) {
+    public boolean getCasa(int posicao) {
         return casas[posicao - 1];
     }
 
-    public boolean atualizaCasa(Int posicao) {
+    public boolean atualizaCasa(int posicao) {
         casas[posicao - 1] = !casas[posicao - 1];
         return casas[posicao - 1];
     }

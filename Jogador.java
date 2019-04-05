@@ -1,17 +1,17 @@
 
 public class Jogador {
 
-    private Int id;
+    private int id;
     private String nome;
-    private Int numBolas;
+    private int numBolas;
 
-    Jogador(Int id, String nome) {
+    Jogador(int id, String nome) {
         this.id = id;
         this.nome = nome;
         this.numBolas = 15;
     }
 
-    public String getIdentifier() {
+    public int getIdentifier() {
         return id;
     }
 
@@ -19,7 +19,7 @@ public class Jogador {
         return nome;
     }
 
-    public Int getBolas() {
+    public int getBolas() {
         return numBolas;
     }
 

@@ -5,7 +5,7 @@ public class Speculate {
     private Tabuleiro tabuleiro;
     private Jogador jogador01;
     private Jogador jogador02;
-    private Int dado;
+    private int dado;
     private Random gerador = new Random(19700621);
 
     Speculate() {
@@ -15,7 +15,7 @@ public class Speculate {
         dado = gerador.nextInt(5) + 1;
     }
 
-    public Int temVaga() {
+    public int temVaga() {
         
         if (jogador01 == null) {
             return 2;
@@ -25,5 +25,18 @@ public class Speculate {
         }
 
         return 0;
+    }
+
+    public boolean temJogador(String nome) {
+        return ((jogador01.getNome() == nome) || (jogador02.getNome() == nome));
+    }
+
+    public void adicionaJogador(Jogador jog) {
+        int temVaga = this.temVaga();
+        if (temVaga == 2) {
+            this.jogador01 = jog;
+        } else if (temVaga == 1) {
+            this.jogador02 = jog;
+        }
     }
 }
