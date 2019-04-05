@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - SpeculateServer",
+            "request": "launch",
+            "mainClass": "SpeculateServer",
+            "projectName": "speculate-rmi_43344634",
+            "vmArgs": "--enable-preview"
+        }
+    ]
+}

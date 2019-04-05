@@ -27,7 +27,7 @@ public class SpeculateImpl extends UnicastRemoteObject implements SpeculateInter
     }
 
     public int encerraPartida(int idUsuario) throws RemoteException {
-        return 0;
+        return jogos[getPartida(idUsuario)].encerraPartida(idUsuario);
     }
 
     public int temPartida(int idUsuario) throws RemoteException {
@@ -75,5 +75,13 @@ public class SpeculateImpl extends UnicastRemoteObject implements SpeculateInter
         }
 
         return -2;
+    }
+
+    private int getPartida(int idUsuario) {
+        for (int i = 0; i < 500; i++) {
+            if (jogos[i].temJogador(idUsuario)) { return i; }
+        }
+
+        return -1;
     }
 }
