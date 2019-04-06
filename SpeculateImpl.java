@@ -4,12 +4,16 @@ import java.util.Random;
 
 public class SpeculateImpl extends UnicastRemoteObject implements SpeculateInterface {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 7896795898928282846L;
     private Speculate[] jogos;
     private Random gerador = new Random();
 
     public SpeculateImpl(int numPartidas) throws RemoteException {
         jogos = new Speculate[numPartidas];
+
+        for (int i = 0; i < 500; i++) {
+            jogos[i] = new Speculate();
+        }
     }
 
     public int registraJogador(String nome) throws RemoteException {
@@ -18,7 +22,7 @@ public class SpeculateImpl extends UnicastRemoteObject implements SpeculateInter
         if (partida == -2) { return -2; }
 
         String id = Integer.toString(gerador.nextInt(999) + 1000);
-        id += String.format("%03d" , partida);
+        id += String.format("%03d" , partida + 1);
 
         Jogador jog = new Jogador(Integer.parseInt(id), nome);
         jogos[partida].adicionaJogador(jog);
@@ -27,31 +31,52 @@ public class SpeculateImpl extends UnicastRemoteObject implements SpeculateInter
     }
 
     public int encerraPartida(int idUsuario) throws RemoteException {
-        return jogos[getPartida(idUsuario)].encerraPartida(idUsuario);
+        int idx = getPartida(idUsuario);
+        if (idx == -1) return idx;
+
+        return jogos[idx].encerraPartida(idUsuario);
     }
 
     public int temPartida(int idUsuario) throws RemoteException {
-        return 0;
+        int idx = getPartida(idUsuario);
+        if (idx == -1) return idx;
+
+        return jogos[idx].temPartida(idUsuario);
     }
     
     public String obtemOponente(int idUsuario) throws RemoteException {
-        return "";
+        int idx = getPartida(idUsuario);
+        if (idx == -1) return "";
+
+        return jogos[idx].obtemOponente(idUsuario);
     }
 
     public int ehMinhaVez(int idUsuario) throws RemoteException {
-        return 0;
+        int idx = getPartida(idUsuario);
+        if (idx == -1) return idx;
+
+        return jogos[idx].ehMinhaVez(idUsuario);
     }
 
     public int obtemNumBolas(int idUsuario) throws RemoteException {
-        return 0;
+        int idx = getPartida(idUsuario);
+        if (idx == -1) return idx;
+
+        return jogos[idx].obtemNumBolas(idUsuario);
     }
 
     public int obtemNumBolasOponente(int idUsuario) throws RemoteException {
-        return 0;
+        int idx = getPartida(idUsuario);
+        if (idx == -1) return idx;
+
+        return jogos[idx].obtemNumBolasOponente(idUsuario);
     }
 
     public String obtemTabuleiro(int idUsuario) throws RemoteException {
-        return "";
+        int idx = getPartida(idUsuario);
+        if (idx == -1) return "";
+
+        return jogos[idx].obtemTabuleiro();
     }
 
     public int defineJogadas(int idUsuario, int numLancamentos) throws RemoteException {
@@ -78,9 +103,11 @@ public class SpeculateImpl extends UnicastRemoteObject implements SpeculateInter
     }
 
     private int getPartida(int idUsuario) {
-        for (int i = 0; i < 500; i++) {
-            if (jogos[i].temJogador(idUsuario)) { return i; }
-        }
+        String stringID = Integer.toString(idUsuario);
+        if (stringID.length() <= 3) { return -1; }
+        int idx = Integer.parseInt(stringID.substring(stringID.length() - 3)) - 1;
+
+        if (jogos[idx].temJogador(idUsuario)) { return idx; }
 
         return -1;
     }

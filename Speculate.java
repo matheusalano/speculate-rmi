@@ -1,7 +1,7 @@
 import java.util.Random;
 
 enum SpeculateStatus {
-    AGUARDANDO_JOGADOR, VEZ_JOG01, VEZ_JOG02, ENCERRADA;
+    AGUARDANDO_JOGADOR, VEZ_JOG01, VEZ_JOG02, ENC_JOG01, ENC_JOG02, WO_JOG01, WO_JOG02;
 } 
 
 public class Speculate {
@@ -9,14 +9,20 @@ public class Speculate {
     private Tabuleiro tabuleiro;
     private Jogador jogador01;
     private Jogador jogador02;
+    private int numLancamentos;
     private int dado;
     private SpeculateStatus status;
     private Random gerador = new Random(19700621);
 
     Speculate() {
+        zerarPartida();
+    }
+
+    private void zerarPartida() {
         tabuleiro = new Tabuleiro();
         jogador01 = null;
         jogador02 = null;
+        numLancamentos = -1;
         dado = gerador.nextInt(5) + 1;
         status = SpeculateStatus.AGUARDANDO_JOGADOR;
     }
@@ -32,11 +38,17 @@ public class Speculate {
     }
 
     public boolean temJogador(String nome) {
-        return ((jogador01.getNome() == nome) || (jogador02.getNome() == nome));
+        if(jogador01 != null && jogador01.getNome().equals(nome)) { return true; }
+        if(jogador02 != null && jogador02.getNome().equals(nome)) { return true; }
+        
+        return false;
     }
 
     public boolean temJogador(int id) {
-        return ((jogador01.getIdentifier() == id) || (jogador02.getIdentifier() == id));
+        if(jogador01 != null && jogador01.getIdentifier() == id) { return true; }
+        if(jogador02 != null && jogador02.getIdentifier() == id) { return true; }
+        
+        return false;
     }
 
     public void adicionaJogador(Jogador jog) {
@@ -45,19 +57,76 @@ public class Speculate {
             this.jogador01 = jog;
         } else if (temVaga == 1) {
             this.jogador02 = jog;
+            this.status = SpeculateStatus.VEZ_JOG01;
         }
     }
 
     public int encerraPartida(int idUsuario) {
+        if (status == SpeculateStatus.AGUARDANDO_JOGADOR) { zerarPartida(); return 0; }
+
         if (jogador01.getIdentifier() == idUsuario) {
-            jogador01 = null;
-            status = SpeculateStatus.ENCERRADA;
+            status = SpeculateStatus.WO_JOG02;
             return 0;
         } else if (jogador02.getIdentifier() == idUsuario) {
-            jogador02 = null;
-            status = SpeculateStatus.ENCERRADA;
+            status = SpeculateStatus.WO_JOG01;
             return 0;
         }
         return -1; 
+    }
+
+    public int temPartida(int idUsuario) {
+        //VERIFICAR TEMPO
+        switch (status) {
+            case AGUARDANDO_JOGADOR:
+                return 0;
+            case VEZ_JOG01:
+                return (jogador01.getIdentifier() == idUsuario) ? 1 : 2;
+            case VEZ_JOG02:
+                return (jogador02.getIdentifier() == idUsuario) ? 1 : 2;
+            default:
+                return -1;
+        }
+    }
+
+    public String obtemOponente(int idUsuario) {
+        if (status == SpeculateStatus.AGUARDANDO_JOGADOR) { return ""; }
+
+        return (jogador01.getIdentifier() == idUsuario) ? jogador02.getNome() : jogador01.getNome();
+    }
+
+    public int ehMinhaVez(int idUsuario) {
+        switch (status) {
+            case AGUARDANDO_JOGADOR:
+                return -2;
+            case VEZ_JOG01:
+                return (jogador01.getIdentifier() == idUsuario) ? 1 : 0;
+            case VEZ_JOG02:
+                return (jogador02.getIdentifier() == idUsuario) ? 1 : 0;
+            case ENC_JOG01:
+                return (jogador01.getIdentifier() == idUsuario) ? 2 : 3;
+            case ENC_JOG02:
+                return (jogador02.getIdentifier() == idUsuario) ? 2 : 3;
+            case WO_JOG01:
+                return (jogador01.getIdentifier() == idUsuario) ? 5 : 6;
+            case WO_JOG02:
+                return (jogador02.getIdentifier() == idUsuario) ? 5 : 6;
+        }
+        return -1;
+    }
+
+    public int obtemNumBolas(int idUsuario) {
+        if (status == SpeculateStatus.AGUARDANDO_JOGADOR) { return -2; }
+
+        return (jogador01.getIdentifier() == idUsuario) ? jogador01.getBolas() : jogador02.getBolas();
+    }
+
+    public int obtemNumBolasOponente(int idUsuario) {
+        if (status == SpeculateStatus.AGUARDANDO_JOGADOR) { return -2; }
+
+        return (jogador01.getIdentifier() == idUsuario) ? jogador02.getBolas() : jogador01.getBolas();
+    }
+
+    public String obtemTabuleiro() {
+        return tabuleiro.toString();
     }
 }
