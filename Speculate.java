@@ -1,4 +1,6 @@
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 enum SpeculateStatus {
     AGUARDANDO_JOGADOR, VEZ_JOG01, VEZ_JOG02, ENC_JOG01, ENC_JOG02, WO_JOG01, WO_JOG02;
@@ -13,6 +15,8 @@ public class Speculate {
     private int dado;
     private SpeculateStatus status;
     private Random gerador = new Random(1279634689);
+    private Timer timer;
+    private TimerTask task;
 
     Speculate() {
         zerarPartida();
@@ -25,6 +29,8 @@ public class Speculate {
         numLancamentos = -1;
         dado = gerador.nextInt(5) + 1;
         status = SpeculateStatus.AGUARDANDO_JOGADOR;
+        task = null;
+        timer = new Timer();
     }
 
     public int temVaga() {
@@ -55,9 +61,12 @@ public class Speculate {
         int temVaga = this.temVaga();
         if (temVaga == 2) {
             this.jogador01 = jog;
+            esperaJogador();
         } else if (temVaga == 1) {
             this.jogador02 = jog;
             this.status = SpeculateStatus.VEZ_JOG01;
+            task.cancel();
+            task = null;
         }
     }
 
@@ -191,5 +200,16 @@ public class Speculate {
             tabuleiro.atualizaCasa(dado);
         }
         numLancamentos--;
+    }
+
+    private void esperaJogador() {
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                zerarPartida();
+            }
+        };
+
+        timer.schedule(task, 30000);
     }
 }
