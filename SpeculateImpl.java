@@ -80,11 +80,17 @@ public class SpeculateImpl extends UnicastRemoteObject implements SpeculateInter
     }
 
     public int defineJogadas(int idUsuario, int numLancamentos) throws RemoteException {
-        return 0;
+        int idx = getPartida(idUsuario);
+        if (idx == -1) return idx;
+
+        return jogos[idx].defineJogadas(idUsuario, numLancamentos);
     }
 
     public int jogaDado(int idUsuario) throws RemoteException {
-        return 0;
+        int idx = getPartida(idUsuario);
+        if (idx == -1) return idx;
+
+        return jogos[idx].jogaDado(idUsuario);
     }
 
     // Helpers

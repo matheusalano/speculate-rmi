@@ -12,7 +12,7 @@ public class Speculate {
     private int numLancamentos;
     private int dado;
     private SpeculateStatus status;
-    private Random gerador = new Random(19700621);
+    private Random gerador = new Random(1279634689);
 
     Speculate() {
         zerarPartida();
@@ -128,5 +128,68 @@ public class Speculate {
 
     public String obtemTabuleiro() {
         return tabuleiro.toString();
+    }
+
+    public int defineJogadas(int idUsuario, int numLancamentos) {
+        if (status == SpeculateStatus.AGUARDANDO_JOGADOR) { return -2; }
+
+        if (jogador01.getIdentifier() == idUsuario) {
+            if (status != SpeculateStatus.VEZ_JOG01) { return -3; }
+            if (this.numLancamentos != -1) { return -4; }
+            if (numLancamentos < 1 || numLancamentos > jogador01.getBolas()) { return -5; }
+
+            this.numLancamentos = numLancamentos;
+            return 1;
+        } else if (jogador02.getIdentifier() == idUsuario) {
+            if (status != SpeculateStatus.VEZ_JOG02) { return -3; }
+            if (this.numLancamentos != -1) { return -4; }
+            if (numLancamentos < 1 || numLancamentos > jogador02.getBolas()) { return -5; }
+
+            this.numLancamentos = numLancamentos;
+            return 1;
+        }
+
+        return -1;
+    }
+
+    public int jogaDado(int idUsuario) {
+        if (status == SpeculateStatus.AGUARDANDO_JOGADOR) { return -2; }
+
+        if (jogador01.getIdentifier() == idUsuario) {
+            if (status != SpeculateStatus.VEZ_JOG01) { return -3; }
+            if (this.numLancamentos == -1) { return -4; }
+            
+            dado = gerador.nextInt(5) + 1;
+            atualizaJogo(idUsuario);
+            
+            if (jogador01.getBolas() == 0) { status = SpeculateStatus.ENC_JOG01; }
+            if (numLancamentos == 0) { numLancamentos = -1; status = SpeculateStatus.VEZ_JOG02; }
+            return dado;
+        } else if (jogador02.getIdentifier() == idUsuario) {
+            if (status != SpeculateStatus.VEZ_JOG02) { return -3; }
+            if (this.numLancamentos == -1) { return -4; }
+
+            dado = gerador.nextInt(5) + 1;
+            atualizaJogo(idUsuario);
+            
+            if (jogador02.getBolas() == 0) { status = SpeculateStatus.ENC_JOG02; }
+            if (numLancamentos == 0) { numLancamentos = -1; status = SpeculateStatus.VEZ_JOG01; }
+            return dado;
+        }
+
+        return -1;
+    }
+
+    private void atualizaJogo(int idUsuario) {
+        Jogador jog = (jogador01.getIdentifier() == idUsuario) ? jogador01 : jogador02;
+
+        if (dado == 6) {
+            tabuleiro.incrementaBolasCentro();
+            jog.decrementarBolas();
+        } else {
+            if (tabuleiro.getCasa(dado)) { jog.incrementarBolas(); } else { jog.decrementarBolas(); }
+            tabuleiro.atualizaCasa(dado);
+        }
+        numLancamentos--;
     }
 }
