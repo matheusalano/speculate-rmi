@@ -14,7 +14,7 @@ public class Speculate {
     private int numLancamentos;
     private int dado;
     private SpeculateStatus status;
-    private Random gerador = new Random(1279634689); //para entrega fazer a soma dos IDs dos jogadores
+    private Random gerador = new Random(2908002); //para entrega fazer a soma dos IDs dos jogadores
     private Timer timer;
     private TimerTask task;
 
@@ -69,7 +69,7 @@ public class Speculate {
             this.jogador02 = jog;
             this.status = SpeculateStatus.VEZ_JOG01;
             task.cancel();
-            task = null;
+            esperaJogada();
         }
     }
 
@@ -152,6 +152,7 @@ public class Speculate {
             if (this.numLancamentos != -1) { return -4; }
             if (numLancamentos < 1 || numLancamentos > jogador01.getBolas()) { return -5; }
 
+            esperaJogada();
             this.numLancamentos = numLancamentos;
             return 1;
         } else if (jogador02.getIdentifier() == idUsuario) {
@@ -159,6 +160,7 @@ public class Speculate {
             if (this.numLancamentos != -1) { return -4; }
             if (numLancamentos < 1 || numLancamentos > jogador02.getBolas()) { return -5; }
 
+            esperaJogada();
             this.numLancamentos = numLancamentos;
             return 1;
         }
@@ -173,21 +175,23 @@ public class Speculate {
             if (status != SpeculateStatus.VEZ_JOG01) { return -3; }
             if (this.numLancamentos == -1) { return -4; }
             
+            esperaJogada();
             dado = gerador.nextInt(5) + 1;
             atualizaJogo(idUsuario);
             
             if (jogador01.getBolas() == 0) { status = SpeculateStatus.ENC_JOG01; }
-            if (numLancamentos == 0) { numLancamentos = -1; status = SpeculateStatus.VEZ_JOG02; }
+            else if (numLancamentos == 0) { numLancamentos = -1; status = SpeculateStatus.VEZ_JOG02; }
             return dado;
         } else if (jogador02.getIdentifier() == idUsuario) {
             if (status != SpeculateStatus.VEZ_JOG02) { return -3; }
             if (this.numLancamentos == -1) { return -4; }
 
+            esperaJogada();
             dado = gerador.nextInt(5) + 1;
             atualizaJogo(idUsuario);
             
             if (jogador02.getBolas() == 0) { status = SpeculateStatus.ENC_JOG02; }
-            if (numLancamentos == 0) { numLancamentos = -1; status = SpeculateStatus.VEZ_JOG01; }
+            else if (numLancamentos == 0) { numLancamentos = -1; status = SpeculateStatus.VEZ_JOG01; }
             return dado;
         }
 
@@ -205,6 +209,19 @@ public class Speculate {
             tabuleiro.atualizaCasa(dado);
         }
         numLancamentos--;
+    }
+
+    private void esperaJogada() {
+        task.cancel();
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                status = (status == SpeculateStatus.VEZ_JOG01) ? SpeculateStatus.WO_JOG02 : SpeculateStatus.WO_JOG01;
+                limpaPartida();
+            }
+        };
+
+        timer.schedule(task, 60000);
     }
 
     private void esperaJogador() {
