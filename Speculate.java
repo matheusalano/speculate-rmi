@@ -3,7 +3,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 enum SpeculateStatus {
-    AGUARDANDO_JOGADOR, VEZ_JOG01, VEZ_JOG02, ENC_JOG01, ENC_JOG02, WO_JOG01, WO_JOG02;
+    AGUARDANDO_JOGADOR, VEZ_JOG01, VEZ_JOG02, ENC_JOG01, ENC_JOG02, WO_JOG01, WO_JOG02, TEMPO_ESGOTADO;
 } 
 
 public class Speculate {
@@ -14,7 +14,7 @@ public class Speculate {
     private int numLancamentos;
     private int dado;
     private SpeculateStatus status;
-    private Random gerador = new Random(1279634689);
+    private Random gerador = new Random(1279634689); //para entrega fazer a soma dos IDs dos jogadores
     private Timer timer;
     private TimerTask task;
 
@@ -29,7 +29,10 @@ public class Speculate {
         numLancamentos = -1;
         dado = gerador.nextInt(5) + 1;
         status = SpeculateStatus.AGUARDANDO_JOGADOR;
-        task = null;
+        if (task != null) {
+            task.cancel();
+            task = null;
+        }
         timer = new Timer();
     }
 
@@ -88,6 +91,8 @@ public class Speculate {
         switch (status) {
             case AGUARDANDO_JOGADOR:
                 return 0;
+            case TEMPO_ESGOTADO:
+                return -2;
             case VEZ_JOG01:
                 return (jogador01.getIdentifier() == idUsuario) ? 1 : 2;
             case VEZ_JOG02:
@@ -119,8 +124,9 @@ public class Speculate {
                 return (jogador01.getIdentifier() == idUsuario) ? 5 : 6;
             case WO_JOG02:
                 return (jogador02.getIdentifier() == idUsuario) ? 5 : 6;
+            default:
+                return -1;
         }
-        return -1;
     }
 
     public int obtemNumBolas(int idUsuario) {
@@ -206,10 +212,22 @@ public class Speculate {
         task = new TimerTask() {
             @Override
             public void run() {
+                status = SpeculateStatus.TEMPO_ESGOTADO;
+                limpaPartida();
+            }
+        };
+
+        timer.schedule(task, 120000);
+    }
+
+    private void limpaPartida() {
+        task = new TimerTask() {
+            @Override
+            public void run() {
                 zerarPartida();
             }
         };
 
-        timer.schedule(task, 30000);
+        timer.schedule(task, 60000);
     }
 }

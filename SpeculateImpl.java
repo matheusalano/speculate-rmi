@@ -97,13 +97,14 @@ public class SpeculateImpl extends UnicastRemoteObject implements SpeculateInter
 
     private int temPartidaDisp(String nome) {
 
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++)
             if (jogos[i].temJogador(nome)) { return -1; }
+
+        for (int i = 0; i < 500; i++) 
             if (jogos[i].temVaga() == 1) { return i; }
-        }
-        for (int i = 0; i < 500; i++) {
+        
+        for (int i = 0; i < 500; i++)
             if (jogos[i].temVaga() == 2) { return i; }
-        }
 
         return -2;
     }

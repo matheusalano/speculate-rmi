@@ -19,13 +19,11 @@ public class SpeculateClient {
             System.out.println ("defineJogadas01: " + speculate.defineJogadas(id, 10));
             System.out.println ("jogaDado01: " + speculate.jogaDado(id));
 
-            Thread.sleep(15000);
-
-            int id2 = speculate.registraJogador("domisobrosa"); System.out.println ("registraJogador02: " + id);
+            Thread.sleep(121000);
 
             System.out.println ("ehMinhaVez01: " + speculate.ehMinhaVez(id));
 
-            Thread.sleep(20000);
+            int id2 = speculate.registraJogador("domisobrosa"); System.out.println ("registraJogador02: " + id);
 
             System.out.println ("ehMinhaVez01: " + speculate.ehMinhaVez(id));
 
