@@ -87,7 +87,6 @@ public class Speculate {
     }
 
     public int temPartida(int idUsuario) {
-        //VERIFICAR TEMPO
         switch (status) {
             case AGUARDANDO_JOGADOR:
                 return 0;
