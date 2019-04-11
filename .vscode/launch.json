@@ -6,6 +6,7 @@
             "request": "launch",
             "mainClass": "SpeculateClient",
             "projectName": "speculate-rmi_43344634",
+            "console": "integratedTerminal",
             "vmArgs": "--enable-preview"
         },
         {
