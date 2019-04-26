@@ -41,24 +41,24 @@ public class SpeculateClient {
                 int temPartida = speculate.temPartida(id);
 
                 if (temPartida == -2) {
-                    System.out.println ("Não encontramos outro jogador. Tente novamente mais tarde...\n\n");  
+                    System.out.println ("\nNão encontramos outro jogador. Tente novamente mais tarde...\n\n");  
                     System.exit(0);
                 } else if (temPartida == -1) {
-                    System.out.println ("Ocorreu um erro inesperado...\n\n");  
+                    System.out.println ("\nOcorreu um erro inesperado...\n\n");  
                     System.exit(1);
                 } else if (temPartida == 0) {
                     System.out.print(".");
                     Thread.sleep(2000);
                 } else if (temPartida == 1) {
                     nomeOponente = speculate.obtemOponente(id);
-                    System.out.println ("Encontramos outro jogador e você inicia jogando.");  
-                    System.out.println ("Jogador " + nomeOponente + "está aguardando sua jogada.\n\n");  
+                    System.out.println ("\nEncontramos outro jogador e você inicia jogando.");  
+                    System.out.println ("Jogador(a) " + nomeOponente + " está aguardando sua jogada.\n\n");  
                     break;
                 } else if (temPartida == 2) {
                     oponenteJogou = true;
                     nomeOponente = speculate.obtemOponente(id);
-                    System.out.println ("Encontramos outro jogador e ele inicia jogando.");  
-                    System.out.println ("Aguarde enquanto " + nomeOponente + "realiza sua jogada.\n\n");  
+                    System.out.println ("\nEncontramos outro jogador e ele inicia jogando.");  
+                    System.out.println ("Aguarde enquanto " + nomeOponente + " realiza sua jogada.\n\n");  
                     break;
                 }
             }
@@ -74,6 +74,9 @@ public class SpeculateClient {
                     System.out.println ("Ocorreu um erro inesperado...\n\n");  
                     System.exit(1);
                 } else if (temPartida == 0) {
+                    if (!oponenteJogou) {
+                        System.out.print("Aguarde enquanto " + nomeOponente + " realiza sua jogada..");  
+                    }
                     definirJogadas = oponenteJogou = true;
                     System.out.print(".");
                     Thread.sleep(2000);
@@ -91,7 +94,7 @@ public class SpeculateClient {
                     break;
                 } else if (temPartida == 1) {
                     if (oponenteJogou) {
-                        System.out.println(nomeOponente + " jogou e agora ele/a possui " + speculate.obtemNumBolasOponente(id) + " bolas.");
+                        System.out.println("\n" + nomeOponente + " jogou e agora ele/a possui " + speculate.obtemNumBolasOponente(id) + " bolas.");
                         System.out.println("O tabuleiro está assim: " + speculate.obtemTabuleiro(id));
                         oponenteJogou = false;
                     }
@@ -112,6 +115,7 @@ public class SpeculateClient {
                         System.out.println ("Pressione ENTER para jogar o dado, ou digite SAIR para encerrar a partida: \n");  
                         String jogar = scan.nextLine();
                         if (jogar.toUpperCase().equals("SAIR")) {
+                            speculate.encerraPartida(id);
                             System.out.println ("Você encerrou a partida.");  
                             System.exit(0);
                         }

@@ -14,7 +14,7 @@ public class Speculate {
     private int numLancamentos;
     private int dado;
     private SpeculateStatus status;
-    private Random gerador = new Random(2908002); //para entrega fazer a soma dos IDs dos jogadores
+    private Random gerador; // = new Random(2908002);
     private Timer timer;
     private TimerTask task;
 
@@ -27,7 +27,7 @@ public class Speculate {
         jogador01 = null;
         jogador02 = null;
         numLancamentos = -1;
-        dado = gerador.nextInt(5) + 1;
+        dado = 1;
         status = SpeculateStatus.AGUARDANDO_JOGADOR;
         if (task != null) {
             task.cancel();
@@ -67,6 +67,7 @@ public class Speculate {
             esperaJogador();
         } else if (temVaga == 1) {
             this.jogador02 = jog;
+            this.gerador = new Random(this.jogador01.getIdentifier() + this.jogador02.getIdentifier());
             this.status = SpeculateStatus.VEZ_JOG01;
             task.cancel();
             esperaJogada();

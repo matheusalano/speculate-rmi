@@ -2,11 +2,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - SpeculateClient2",
+            "request": "launch",
+            "mainClass": "SpeculateClient",
+            "projectName": "speculate-rmi_43344634",
+            "console": "externalTerminal",
+            "vmArgs": "--enable-preview"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - SpeculateClient",
             "request": "launch",
             "mainClass": "SpeculateClient",
             "projectName": "speculate-rmi_43344634",
-            "console": "integratedTerminal",
+            "console": "externalTerminal",
             "vmArgs": "--enable-preview"
         },
         {
@@ -15,6 +24,7 @@
             "request": "launch",
             "mainClass": "SpeculateServer",
             "projectName": "speculate-rmi_43344634",
+            "console": "externalTerminal",
             "vmArgs": "--enable-preview"
         }
     ]
