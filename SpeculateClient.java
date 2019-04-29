@@ -28,7 +28,7 @@ public class SpeculateClient {
                     System.out.println ("Não há partidas no momento. Tente novamente mais tarde...\n\n");  
                     System.exit(0);
                 } else {
-                    System.out.println ("Obrigado!\n");  
+                    System.out.println ("\nObrigado!\n");  
                     break;
                 }
             }
@@ -53,12 +53,14 @@ public class SpeculateClient {
                     nomeOponente = speculate.obtemOponente(id);
                     System.out.println ("\nEncontramos outro jogador e você inicia jogando.");  
                     System.out.println ("Jogador(a) " + nomeOponente + " está aguardando sua jogada.\n\n");  
+                    System.out.println ("O tabuleiro começa assim: " + speculate.obtemTabuleiro(id));
                     break;
                 } else if (temPartida == 2) {
                     oponenteJogou = true;
                     nomeOponente = speculate.obtemOponente(id);
                     System.out.println ("\nEncontramos outro jogador e ele inicia jogando.");  
                     System.out.println ("Aguarde enquanto " + nomeOponente + " realiza sua jogada.\n\n");  
+                    System.out.println ("O tabuleiro começa assim: " + speculate.obtemTabuleiro(id));
                     break;
                 }
             }
@@ -87,10 +89,10 @@ public class SpeculateClient {
                     System.out.println("Você perdeu.\n");
                     break;
                 } else if (temPartida == 5) {
-                    System.out.println("Você venceu por WO. Parabéns!\n");
+                    System.out.println("\nVocê venceu por WO. Parabéns!\n");
                     break;
                 } else if (temPartida == 6) {
-                    System.out.println("Você perdeu por WO.\n");
+                    System.out.println("\nVocê perdeu por WO.\n");
                     break;
                 } else if (temPartida == 1) {
                     if (oponenteJogou) {
@@ -109,10 +111,11 @@ public class SpeculateClient {
                         } else if (numLancamentos == -5) {
                             System.out.println ("Número de bolas inválido. Você tem: " + speculate.obtemNumBolas(id) + " bolas\n\n");  
                         } else if (numLancamentos == -4 || numLancamentos == 1) {
+                            scan.skip("\n");
                             definirJogadas = false;
                         }
                     } else {
-                        System.out.println ("Pressione ENTER para jogar o dado, ou digite SAIR para encerrar a partida: \n");  
+                        System.out.println ("Pressione ENTER para jogar o dado, ou digite SAIR para encerrar a partida: \n");
                         String jogar = scan.nextLine();
                         if (jogar.toUpperCase().equals("SAIR")) {
                             speculate.encerraPartida(id);
