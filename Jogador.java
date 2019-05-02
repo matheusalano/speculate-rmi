@@ -5,10 +5,10 @@ public class Jogador {
     private String nome;
     private int numBolas;
 
-    Jogador(int id, String nome) {
+    Jogador(int id, String nome, int numBolas) {
         this.id = id;
         this.nome = nome;
-        this.numBolas = 15;
+        this.numBolas = numBolas;
     }
 
     public int getIdentifier() {

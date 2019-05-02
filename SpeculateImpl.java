@@ -7,8 +7,10 @@ public class SpeculateImpl extends UnicastRemoteObject implements SpeculateInter
     private static final long serialVersionUID = 7896795898928282846L;
     private Speculate[] jogos;
     private Random gerador = new Random();
+    private int bolasPorJogador;
 
-    public SpeculateImpl(int numPartidas) throws RemoteException {
+    public SpeculateImpl(int numPartidas, int bolasPorJogador) throws RemoteException {
+        this.bolasPorJogador = bolasPorJogador;
         jogos = new Speculate[numPartidas];
 
         for (int i = 0; i < 500; i++) {
@@ -24,7 +26,7 @@ public class SpeculateImpl extends UnicastRemoteObject implements SpeculateInter
         String id = Integer.toString(gerador.nextInt(999) + 1000);
         id += String.format("%03d" , partida + 1);
 
-        Jogador jog = new Jogador(Integer.parseInt(id), nome);
+        Jogador jog = new Jogador(Integer.parseInt(id), nome, bolasPorJogador);
         jogos[partida].adicionaJogador(jog);
 
         return jog.getIdentifier();
