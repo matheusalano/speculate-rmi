@@ -1,3 +1,6 @@
+partidas = 500
+bolas = 15
+
 all:			SpeculateClient.class SpeculateServer.class \
 			SpeculateImpl.class SpeculateInterface.class
 
@@ -26,7 +29,7 @@ run-client:		all
 			@java SpeculateClient
 
 run-server:		all
-			@java SpeculateServer
+			@java SpeculateServer $(partidas) $(bolas)
 
 clean:
 			@rm -f *.class *~

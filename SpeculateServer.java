@@ -12,8 +12,9 @@ public class SpeculateServer {
         }
 
         try {
-            int numDePartidas = 500;
-            int bolasPorJogador = 15;
+            int numDePartidas = Integer.parseInt(args[0]);
+            int bolasPorJogador = Integer.parseInt(args[1]);
+            System.out.println("Número de partidas: " + numDePartidas + "; Número de bolas por jogador: " + bolasPorJogador);
             Naming.rebind ("Speculate", new SpeculateImpl(numDePartidas, bolasPorJogador));
             System.out.println ("SpeculateServer is ready."); } catch (Exception e) {
             System.out.println ("SpeculateServer failed:");
